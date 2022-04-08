@@ -20,14 +20,12 @@ class AgnewsDataset():
         text_a = df.headline.values # type is ndarray
         text_b = df.body.values
         labels = df.label.values
-        # print(text_b[0])
-        # print(text_b[1].replace('\\', ' '))
+
         for i, text in enumerate(text_b):
             text_b[i] = text.replace('\\', ' ')
         for i, label in enumerate(labels):
             labels[i] = int(label) - 1
-        # print(text_b[1])
-        # print(labels[1])
+
 
         # 根据label分类，并select samples（小样本，所以取num_train_samples_per_label个）
         selected_ids = []
@@ -104,8 +102,7 @@ class AgnewsDataset():
         print(composed_encode[1:3])
         # print(composed_encode[2])
 
-        # self.truncate(parts_a, parts_b, max_length=self.args.max_seq_length)
-        # x = np.delete(x, [0,4])
+
 
         # truncate---裁剪 + 加入特殊tokens + 填充 + attention_mask层等
         token_type_ids = []
@@ -126,8 +123,7 @@ class AgnewsDataset():
             att_mask = att_mask + ([0] * padding_length)
             # print(len(att_mask))
             attention_mask.append(att_mask)
-            # attention_mask.append([1] * len(composed_encode[i]))
-            # token_type_ids.append(tokenizer.create_token_type_ids_from_sequences(composed_encode[i]))
+
             # 特别的，create_token_type_ids_from_sequences 的 return len(cls + token_ids_0 + sep) * [0]，
             # 所以要在添加cls和sep前做
             
@@ -149,30 +145,6 @@ class AgnewsDataset():
         attention_mask = torch.tensor(attention_mask).long()
         mlm_labels = torch.tensor(mlm_labels).long()
         labels = torch.tensor(labels).long()
-
-        print(input_ids.shape)
-        print(token_type_ids.shape)
-        print(attention_mask.shape)
-        print(mlm_labels.shape)
-        print(labels.shape)
-
-        # print(composed_encode[1])
-        
-        
-        
-        # print(token_type_ids[1]) # 全0
-
-        # print(attention_mask[1])
-        # print(len(attention_mask))
-        # print(len(attention_mask[1]))
-        # print(len(token_type_ids))
-        # print(len(token_type_ids[1]))
-        # print(len(mlm_labels))
-        # print(len(mlm_labels[1]))
-        # print(mlm_labels[1])
-
-        print(labels)
-        print(type(labels))
 
         # 将label存成文件
         # book = xlwt.Workbook()
@@ -196,17 +168,6 @@ class AgnewsDataset():
 
         print(args.train_dataloader)
 
-        
-    # def get_mask_position(self, input_ids_i):
-    #     flags = [-1] * len(input_ids_i)
-    #     flags_idx = input_ids_i.index(self.mask_id) # 找mask的位置
-    #     flags[flags_idx] = 1 # 特定地方为1
-    #     return flags
-
-    # @property
-    # def mask_id(self) -> int:
-    #     """Return the underlying LM's mask id"""
-    #     return self.tokenizer.mask_token_id
 
     def get_validset_from_csv(self, args, exclude):
         df = pd.read_csv(os.path.join(args.dic_dataset, args.dataset, args.file_train_dataset), delimiter=',', 
@@ -214,14 +175,12 @@ class AgnewsDataset():
         text_a = df.headline.values # type is ndarray
         text_b = df.body.values
         labels = df.label.values
-        # print(text_b[1])
-        # print(text_b[1].replace('\\', ' '))
+
         for i, text in enumerate(text_b):
             text_b[i] = text.replace('\\', ' ')
         for i, label in enumerate(labels):
             labels[i] = int(label) - 1
-        # print(text_b[1])
-        # print(labels[1])
+
 
         # 根据label分类，并select samples（小样本，所以取num_train_samples_per_label个）
         
@@ -242,14 +201,7 @@ class AgnewsDataset():
         selected_text_b = [text_b[idx] for idx in selected_ids]
         selected_labels = [labels[idx] for idx in selected_ids]
         
-        print(selected_labels)
-        print("================valid selected_ids")
-        print(selected_ids)
-        # f = open('./dataset_few_shot/valid_fourclass_144.csv', 'w')
-        # for i in range(len(selected_labels)):
-        #     f.write('"%d","%s","%s"\n' % (selected_labels[i], selected_text_a[i], selected_text_b[i]))
-        #     # print("{}, {}, {}" % selected_labels, selected_text_a, selected_text_b)
-        # f.close()
+
 
         model_classes = get_model_classes()
         model_config = model_classes[args.model_type]
@@ -291,17 +243,11 @@ class AgnewsDataset():
 
         composed = np.array(composed)
 
-        print(type(composed))
-        # print(composed[2])
 
         composed_encode = [tokenizer.encode(sent, add_special_tokens=False) for sent in composed]
 
-        print(type(composed_encode))
-        print(composed_encode[1:3])
-        # print(composed_encode[2])
 
-        # self.truncate(parts_a, parts_b, max_length=self.args.max_seq_length)
-        # x = np.delete(x, [0,4])
+
 
         # truncate---裁剪 + 加入特殊tokens + 填充 + attention_mask层等
         token_type_ids = []
@@ -345,29 +291,6 @@ class AgnewsDataset():
         mlm_labels = torch.tensor(mlm_labels).long()
         labels = torch.tensor(labels).long()
 
-        print(input_ids.shape)
-        print(token_type_ids.shape)
-        print(attention_mask.shape)
-        print(mlm_labels.shape)
-        print(labels.shape)
-
-        # print(composed_encode[1])
-        
-        
-        
-        # print(token_type_ids[1]) # 全0
-
-        # print(attention_mask[1])
-        # print(len(attention_mask))
-        # print(len(attention_mask[1]))
-        # print(len(token_type_ids))
-        # print(len(token_type_ids[1]))
-        # print(len(mlm_labels))
-        # print(len(mlm_labels[1]))
-        # print(mlm_labels[1])
-
-        print(labels)
-        print(type(labels))
 
         # 将label存成文件
         # book = xlwt.Workbook()
@@ -411,23 +334,17 @@ class AgnewsDataset():
             for idx, line in enumerate(myline):
                 idx_label_words = line.strip().replace(",", " ").split()
                 all_label_words[idx] = idx_label_words
-        # 实际上已经手动删除
-        # self.all_label_words = self.delete_common_words(self.label_id_2_name) # {0: ['great', 'excellent', 'good', 'good', 'good', 'fantastic']}
+
         encode_all_label_words = []
         for i in range(len(all_label_words)):
             i_words = []
             for word in all_label_words[i]:
-                # if not self.temps["mask_first"]:
-                #     word = " " + word ###########   一个trick
+
                 word = self.tokenizer.encode(word, add_special_tokens=False) # 不加[CLS]和[SEP]——一个word变成[7506, 41009, 5183] 或者 [4656]
                 i_words.append(word)
             encode_all_label_words.append(i_words)
 
-        # print("encode_all_label_words: ")
-        # print(encode_all_label_words)
 
-        # shortest = min([len(i) for i in prompt_label_idx]) # 哪个label对应的label words最少，最少是多少
-        # assert shortest > 0, "shortest label set has no words"
 
         self.encode_all_label_words = encode_all_label_words
     
@@ -511,10 +428,7 @@ class AgnewsDataset():
             att_mask = att_mask + ([0] * padding_length)
             # print(len(att_mask))
             attention_mask.append(att_mask)
-            # attention_mask.append([1] * len(composed_encode[i]))
-            # token_type_ids.append(tokenizer.create_token_type_ids_from_sequences(composed_encode[i]))
-            # 特别的，create_token_type_ids_from_sequences 的 return len(cls + token_ids_0 + sep) * [0]，
-            # 所以要在添加cls和sep前做
+
             
             token_type_ids_temp = token_type_ids_temp + ([0] * padding_length)
             token_type_ids.append(token_type_ids_temp)
@@ -534,15 +448,6 @@ class AgnewsDataset():
         mlm_labels = torch.tensor(mlm_labels).long()
         labels = torch.tensor(labels).long()
 
-        # print(input_ids.shape)
-        # print(token_type_ids.shape)
-        # print(attention_mask.shape)
-        # print(mlm_labels.shape)
-        # print(labels.shape)
-
-
-        # print(labels)
-        # print(type(labels))
 
         test_dataset = TensorDataset(input_ids, token_type_ids, attention_mask, labels, mlm_labels)
         test_batch_size = 16
@@ -573,23 +478,7 @@ class DBPediaDataset():
                 text_b_i = ". ".join(text_b_i)
                 text_a.append(text_a_i)
                 text_b.append(text_b_i)
-        
-        # print(text_a)
-        # print(labels)
-
-        # df = pd.read_csv(os.path.join(args.dic_dataset, args.dataset, args.file_train_dataset), delimiter=',', 
-        #             header=None, names=['label', 'headline', 'body'])
-        # text_a = df.headline.values # type is ndarray
-        # text_b = df.body.values
-        # labels = df.label.values
-        # # print(text_b[0])
-        # # print(text_b[1].replace('\\', ' '))
-        # for i, text in enumerate(text_b):
-        #     text_b[i] = text.replace('\\', ' ')
-        # for i, label in enumerate(labels):
-        #     labels[i] = int(label) - 1
-        # # print(text_b[1])
-        # # print(labels[1])
+       
 
         # 根据label分类，并select samples（小样本，所以取num_train_samples_per_label个）
         selected_ids = []
@@ -664,10 +553,7 @@ class DBPediaDataset():
 
         print(type(composed_encode))
         print(composed_encode[1:3])
-        # print(composed_encode[2])
 
-        # self.truncate(parts_a, parts_b, max_length=self.args.max_seq_length)
-        # x = np.delete(x, [0,4])
 
         # truncate---裁剪 + 加入特殊tokens + 填充 + attention_mask层等
         token_type_ids = []
@@ -688,10 +574,7 @@ class DBPediaDataset():
             att_mask = att_mask + ([0] * padding_length)
             # print(len(att_mask))
             attention_mask.append(att_mask)
-            # attention_mask.append([1] * len(composed_encode[i]))
-            # token_type_ids.append(tokenizer.create_token_type_ids_from_sequences(composed_encode[i]))
-            # 特别的，create_token_type_ids_from_sequences 的 return len(cls + token_ids_0 + sep) * [0]，
-            # 所以要在添加cls和sep前做
+
             
             token_type_ids_temp = token_type_ids_temp + ([0] * padding_length)
             # print(len(token_type_ids_temp))
@@ -712,26 +595,7 @@ class DBPediaDataset():
         mlm_labels = torch.tensor(mlm_labels).long()
         labels = torch.tensor(labels).long()
 
-        print(input_ids.shape)
-        print(token_type_ids.shape)
-        print(attention_mask.shape)
-        print(mlm_labels.shape)
-        print(labels.shape)
 
-        # print(composed_encode[1])
-        
-        
-        
-        # print(token_type_ids[1]) # 全0
-
-        # print(attention_mask[1])
-        # print(len(attention_mask))
-        # print(len(attention_mask[1]))
-        # print(len(token_type_ids))
-        # print(len(token_type_ids[1]))
-        # print(len(mlm_labels))
-        # print(len(mlm_labels[1]))
-        # print(mlm_labels[1])
 
         print(labels)
         print(type(labels))
@@ -759,16 +623,7 @@ class DBPediaDataset():
         print(args.train_dataloader)
 
         
-    # def get_mask_position(self, input_ids_i):
-    #     flags = [-1] * len(input_ids_i)
-    #     flags_idx = input_ids_i.index(self.mask_id) # 找mask的位置
-    #     flags[flags_idx] = 1 # 特定地方为1
-    #     return flags
 
-    # @property
-    # def mask_id(self) -> int:
-    #     """Return the underlying LM's mask id"""
-    #     return self.tokenizer.mask_token_id
 
     def get_validset_from_csv(self, args, exclude):
         label_file  = open(os.path.join(args.dic_dataset, args.dataset, args.file_train_labels_dataset),'r') 
@@ -783,19 +638,7 @@ class DBPediaDataset():
                 text_b_i = ". ".join(text_b_i)
                 text_a.append(text_a_i)
                 text_b.append(text_b_i)
-        # df = pd.read_csv(os.path.join(args.dic_dataset, args.dataset, args.file_train_dataset), delimiter=',', 
-        #             header=None, names=['label', 'headline', 'body'])
-        # text_a = df.headline.values # type is ndarray
-        # text_b = df.body.values
-        # labels = df.label.values
-        # # print(text_b[1])
-        # # print(text_b[1].replace('\\', ' '))
-        # for i, text in enumerate(text_b):
-        #     text_b[i] = text.replace('\\', ' ')
-        # for i, label in enumerate(labels):
-        #     labels[i] = int(label) - 1
-        # print(text_b[1])
-        # print(labels[1])
+
 
         # 根据label分类，并select samples（小样本，所以取num_train_samples_per_label个）
         
@@ -870,12 +713,7 @@ class DBPediaDataset():
 
         composed_encode = [tokenizer.encode(sent, add_special_tokens=False) for sent in composed]
 
-        print(type(composed_encode))
-        print(composed_encode[1:3])
-        # print(composed_encode[2])
 
-        # self.truncate(parts_a, parts_b, max_length=self.args.max_seq_length)
-        # x = np.delete(x, [0,4])
 
         # truncate---裁剪 + 加入特殊tokens + 填充 + attention_mask层等
         token_type_ids = []
@@ -919,29 +757,7 @@ class DBPediaDataset():
         mlm_labels = torch.tensor(mlm_labels).long()
         labels = torch.tensor(labels).long()
 
-        print(input_ids.shape)
-        print(token_type_ids.shape)
-        print(attention_mask.shape)
-        print(mlm_labels.shape)
-        print(labels.shape)
 
-        # print(composed_encode[1])
-        
-        
-        
-        # print(token_type_ids[1]) # 全0
-
-        # print(attention_mask[1])
-        # print(len(attention_mask))
-        # print(len(attention_mask[1]))
-        # print(len(token_type_ids))
-        # print(len(token_type_ids[1]))
-        # print(len(mlm_labels))
-        # print(len(mlm_labels[1]))
-        # print(mlm_labels[1])
-
-        print(labels)
-        print(type(labels))
 
         # 将label存成文件
         # book = xlwt.Workbook()
@@ -997,11 +813,7 @@ class DBPediaDataset():
                 i_words.append(word)
             encode_all_label_words.append(i_words)
 
-        # print("encode_all_label_words: ")
-        # print(encode_all_label_words)
 
-        # shortest = min([len(i) for i in prompt_label_idx]) # 哪个label对应的label words最少，最少是多少
-        # assert shortest > 0, "shortest label set has no words"
 
         self.encode_all_label_words = encode_all_label_words
     
@@ -1021,16 +833,7 @@ class DBPediaDataset():
                 text_a.append(text_a_i)
                 text_b.append(text_b_i)
         
-        # df = pd.read_csv(os.path.join(args.dic_dataset, args.dataset, args.file_test_dataset), delimiter=',', 
-        #             header=None, names=['label', 'headline', 'body'])
-        # text_a = df.headline.values # type is ndarray
-        # text_b = df.body.values
-        # labels = df.label.values
-        
-        # for i, text in enumerate(text_b):
-        #     text_b[i] = text.replace('\\', ' ')
-        # for i, label in enumerate(labels):
-        #     labels[i] = int(label) - 1
+
        
 
         model_classes = get_model_classes()
@@ -1099,10 +902,7 @@ class DBPediaDataset():
             att_mask = att_mask + ([0] * padding_length)
             # print(len(att_mask))
             attention_mask.append(att_mask)
-            # attention_mask.append([1] * len(composed_encode[i]))
-            # token_type_ids.append(tokenizer.create_token_type_ids_from_sequences(composed_encode[i]))
-            # 特别的，create_token_type_ids_from_sequences 的 return len(cls + token_ids_0 + sep) * [0]，
-            # 所以要在添加cls和sep前做
+
             
             token_type_ids_temp = token_type_ids_temp + ([0] * padding_length)
             token_type_ids.append(token_type_ids_temp)
@@ -1122,15 +922,6 @@ class DBPediaDataset():
         mlm_labels = torch.tensor(mlm_labels).long()
         labels = torch.tensor(labels).long()
 
-        # print(input_ids.shape)
-        # print(token_type_ids.shape)
-        # print(attention_mask.shape)
-        # print(mlm_labels.shape)
-        # print(labels.shape)
-
-
-        # print(labels)
-        # print(type(labels))
 
         test_dataset = TensorDataset(input_ids, token_type_ids, attention_mask, labels, mlm_labels)
         test_batch_size = 16
@@ -1138,9 +929,7 @@ class DBPediaDataset():
         test_dataloader = DataLoader(test_dataset, sampler=test_sampler, batch_size=test_batch_size)
         args.test_dataloader = test_dataloader
 
-        print(args.test_dataloader)
-        print(len(labels))
-        print(len(args.test_dataloader))
+
     
 
 Datasets = {
