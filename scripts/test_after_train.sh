@@ -1,10 +1,9 @@
-# for mydataset in agnews
-# do
+
     for myweight_learning_rate in 0.06
     do
-        for template_id in 0 # 1 2 3
+        for template_id in 0 
         do
-            for myseed in 144 # 133 #144
+            for myseed in 144 
             do
                 python -u src/test_after_train.py \
                 --task train_and_save_embedding_visualization \
