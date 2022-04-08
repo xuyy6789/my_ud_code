@@ -149,11 +149,7 @@ class Runner(object):
             # torch.save(save_logits, "./my_logits.pt") #将字符串写入文件中
             # print("write finished!")
 
-    # def cal_pred_use_logits(self, logits):
-    #     # print("logits.size: ", logits.size())
-        
-    #     print("preds: ", preds)
-    #     return preds
+
     
     def __valid(self, args): # valid的目的是确认k_ratio
         self.criterion.eval()
@@ -207,8 +203,6 @@ class Runner(object):
         all_labels = [i for per in all_labels for i in per]
         
 
-        # all_labels = torch.tensor(all_labels)
-        # all_logits = torch.tensor(all_logits)
 
         return all_labels, all_logits_all
 
@@ -220,9 +214,7 @@ class Runner(object):
 
 
 if __name__ == "__main__":
-    # if args.task == "train_and_save_embedding_visualization":
-    #     runner = Runner(args)
-    #     runner.train_model()
+
 
 
     if args.task == "train_and_save_embedding_visualization":
