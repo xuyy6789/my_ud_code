@@ -17,3 +17,4 @@ The AG's news topic classification dataset is constructed by choosing 4 largest 
 The file classes.txt contains a list of classes corresponding to each label.
 
 The files train.csv and test.csv contain all the training samples as comma-sparated values. There are 3 columns in them, corresponding to class index (1 to 4), title and description. The title and description are escaped using double quotes ("), and any internal double quote is escaped by 2 double quotes (""). New lines are escaped by a backslash followed with an "n" character, that is "\n".
+ 
