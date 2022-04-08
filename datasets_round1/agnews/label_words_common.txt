@@ -1,0 +1,2 @@
+not, NR, Not, NOT
+technology, engineering, science, technological
