@@ -11,20 +11,10 @@ from transformers import BertConfig, BertTokenizer, BertForMaskedLM, \
 _GLOBAL_ARGS = None
 
 _MODEL_CLASSES = {
-    'bert': {
-        'config': BertConfig,
-        'tokenizer': BertTokenizer,
-        'model': BertForMaskedLM,
-    },
     'roberta': {
         'config': RobertaConfig,
         'tokenizer': RobertaTokenizer,
-        'model': RobertaForMaskedLM,   #
-    },
-    'albert': {
-        'config': AlbertConfig,
-        'tokenizer': AlbertTokenizer,
-        'model': AlbertModel
+        'model': RobertaForMaskedLM,   
     }
 }
 
