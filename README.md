@@ -1,5 +1,5 @@
-# ud_code
-#### This is my UD project code.
+# LPTF: Label Prompt-Tuning used in Filtering
+#### This is my UD project code for LPTF.
 ## Run the scripts
 ```
 bash scripts/run_method_common.sh 
