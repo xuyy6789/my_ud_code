@@ -1,0 +1,2 @@
+not, NR, Not, NOT
+plant,tree,fern,forest
