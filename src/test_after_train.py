@@ -47,9 +47,6 @@ class TestAfterTrain(nn.Module):
         self.datasetclass.get_label_words(self, args) # 存入self.encode_all_label_words
         print("load finished!")
     
-    # def set_k_for_ranking(self, topk_ratio=0, verbose=True):
-    #     if topk_ratio > 0:
-    #         self.topk = torch.tensor(int(self.criterion.num_all_label_words * topk_ratio)) # 选几个词
     
 
     def __predict_batch(self, all_logits):
@@ -62,30 +59,6 @@ class TestAfterTrain(nn.Module):
         scores = my_logits.reshape([my_logits.size(0), self.criterion.class_num, self.criterion.max_len])
         scores = torch.sum(scores, dim=-1)
         preds = torch.argmax(scores, dim=-1)
-
-
-        # logits = self.criterion.get_label_words_mask_logits_singletoken(all_logits) # 获取mask向量中，对应label words的那些值
-        # logits = nn.functional.softmax(logits, dim=-1)
-        # logits = torch.log(logits + 1e-15)
-        # self.criterion.set_k_for_ranking(args.best_k_ratio)
-        # nottopk = torch.argsort(-logits, dim=-1)[:,self.criterion.topk:]
-        # rowid = torch.arange(nottopk.size(0)).unsqueeze(-1).expand_as(nottopk)
-        # index = (rowid.reshape(-1), nottopk.reshape(-1))
-        # weight = [1 for i in range(len(self.criterion.learnable_weights_for_label_wrods.reshape(-1)))]
-        # weight = torch.tensor(weight)
-        # self.weights = weight
-        # scores = torch.clone(self.weights).unsqueeze(0).repeat(logits.size(0),1)
-        # scores[index] = 0
-        # scores = scores.reshape([logits.size(0), self.criterion.class_num, self.criterion.max_len])
-        # scores = torch.sum(scores, dim=-1)
-        # preds = torch.argmax(scores, dim=-1)
-
-        # logits = self.criterion.get_label_words_mask_logits_singletoken(all_logits) # 获取mask向量中，对应label words的那些值
-        # logits = nn.functional.softmax(logits, dim=-1)
-        # logits = torch.log(logits + 1e-15)
-        # scores = logits.reshape([logits.size(0), self.criterion.class_num, self.criterion.max_len])
-        # scores = torch.sum(scores, dim=-1)
-        # preds = torch.argmax(scores, dim=-1)
 
         return preds
         
@@ -128,35 +101,10 @@ class TestAfterTrain(nn.Module):
                 print(all_labels)
                 print(len(all_labels))
                 
-                # if (step+1) == 50:
-                #     all_labels = [i for per in all_labels for i in per]
-                #     all_preds = [i for per in all_preds for i in per]
-                #     pre, rec, f1, sup = precision_recall_fscore_support(all_labels, all_preds)
-                #     print("precision:", pre, "\nrecall:", rec, "\nf1-score:", f1, "\nsupport:", sup)
-        # all_labels = torch.cat(all_labels, axis=0)
-        # all_preds = np.concatenate(all_preds)
-        # mic, mac = self.criterion.f1_score(all_preds, all_labels)
-        # # all_logits_all = torch.cat(all_logits_all, axis=0)
-        # return mic, mac
 
         all_labels = [i for per in all_labels for i in per]
         all_preds = [i for per in all_preds for i in per]
 
-        # train_correct = 0
-        # for i in range(len(all_labels)):
-        #     if all_labels[i].item() == all_preds[i].item():
-        #         train_correct += 1
-        # acc = train_correct / len(all_labels)
-        # print(train_correct)
-        # print(acc)
-
-        # 将labels和preds存成文件
-        # filename = open('result/test_results.txt', 'w')
-        # for value in all_labels:
-        #     filename.write(str(value))
-        # for value in all_preds:
-        #     filename.write(str(value))
-        # filename.close()
 
         # 保存logits值
         print("save results: ")
@@ -173,15 +121,6 @@ class TestAfterTrain(nn.Module):
         print("precision:", pre, "\nrecall:", rec, "\nf1-score:", f1, "\nsupport:", sup)
 
 
-
-        # mic, mac = self.__model_forward_preds(self.test_dataloader)
-
-
-# import torch
-# a = torch.load("./model_save/criterion_params.pt")
-# print(len(a))
-# print(len(a[0]))
-# print(a[0][0])
 
 if __name__ == "__main__":
 
