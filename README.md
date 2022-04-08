@@ -1,4 +1,4 @@
-# LPTF: Label Prompt-Tuning used in Filtering
+# LPTF : Label Prompt-Tuning used in Filtering
 #### This is my UD project code for LPTF.
 ## Run the scripts
 ```
