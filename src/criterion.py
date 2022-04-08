@@ -10,14 +10,9 @@ class RankingCriterion(nn.Module): #
 
     def __init__(self, args, encode_all_label_words):
         super(RankingCriterion, self).__init__()
-        # self.all_samples_label_words_logits = self.get_label_words_logits_singletoken
-        # print("encode_all_label_words: ")
-        # print(encode_all_label_words)
         self.args = args
         self.__get_encode_all_label_words_singletoken(encode_all_label_words) # 设置 self.encode_all_label_words
 
-
-        # print("yes")
         
 
     def forward(self, all_logits, labels):
@@ -34,62 +29,12 @@ class RankingCriterion(nn.Module): #
         my_criterion = torch.nn.CrossEntropyLoss()
         myloss = my_criterion(scores, labels)
     
-        # multi_labels = self.multi_index_label_words[labels] # label是list:[0,0,2,3,1,...,2]，取indexable_labels的第一维
-        # my_logits = self.get_label_words_mask_logits_singletoken(all_logits) # 获取mask向量中，对应label words的那些值
-        # my_logits = nn.functional.softmax(my_logits, dim=-1)
-        # my_logits = torch.log(my_logits + 1e-15)
-        # my_criterion = torch.nn.CrossEntropyLoss()
-        # myloss = my_criterion(my_logits, multi_labels)
-
-
-        # my_logits = self.get_label_words_mask_logits_singletoken(all_logits) # 获取mask向量中，对应label words的那些值
-        # my_logits = nn.functional.softmax(my_logits, dim=-1)
-        # my_logits = torch.log(my_logits + 1e-15)
-        # scores = my_logits.reshape([my_logits.size(0), self.class_num, self.max_len])
-        # scores = torch.sum(scores, dim=-1)
-        # my_criterion = torch.nn.CrossEntropyLoss()
-        # myloss = my_criterion(scores, labels)
-
-        # my_logits = self.get_label_words_mask_logits_singletoken(all_logits) # 获取mask向量中，对应label words的那些值
-        # self.set_k_for_ranking(self.args.best_k_ratio)
-        # nottopk = torch.argsort(-my_logits, dim=-1)[:,self.topk:]
-        # rowid = torch.arange(nottopk.size(0)).unsqueeze(-1).expand_as(nottopk)
-        # index = (rowid.reshape(-1), nottopk.reshape(-1))
-        # weight = nn.functional.softmax(self.learnable_weights_for_label_wrods, dim=-1).reshape(-1)
-        # # weight = [1 for i in range(len(self.learnable_weights_for_label_wrods.reshape(-1)))]
-        # weight = torch.tensor(weight)
-        # self.weights = weight
-        # scores = torch.clone(self.weights).unsqueeze(0).repeat(my_logits.size(0),1)
-        # scores[index] = 0
-        # scores = scores.reshape([my_logits.size(0), self.class_num, self.max_len])
-        # scores = torch.sum(scores, dim=-1)
-        # preds_scores = scores.numpy().tolist()
-        # preds_scores = torch.tensor(preds_scores, dtype=torch.float64, requires_grad=True)
-        # # preds = torch.argmax(scores, dim=-1)
-        # # print(preds)
-        # # print(type(preds[0]))
-        # # list_temp_scores = scores.numpy().tolist()
-        # # list_temp_preds = preds.numpy().tolist()
-        # # preds_scores = []
-        # # preds_scores = torch.tensor(list_temp, dtype=torch.float64, requires_grad=True)
-        # # for i, item in enumerate(list_temp_scores):
-        # #     list_temp = [0, 1]
-        # #     list_temp[list_temp_preds[i]] = 1
-        # #     list_temp[1 - list_temp_preds[i]] = 0
-        # #     preds_scores.append(list_temp)
-        # # preds_scores = torch.tensor(preds_scores, dtype=torch.float64, requires_grad=True)
-        # # print("preds_scores: ", preds_scores)
-        # my_criterion = torch.nn.CrossEntropyLoss()
-        # myloss = my_criterion(preds_scores, labels)
-
         return myloss
 
 
     def get_label_words_mask_logits_singletoken(self, all_logits):
         """Return Tensor([[The predicted probability of label words of all classes by LM on mask position], [], [], ..., [Sentence 16]]), 16 is batch size"""
         label_words_logits = all_logits[:, self.encode_all_label_words_tensor.reshape(-1)] # reshape(-1): 展开成一行，即[[],[]]变成[]
-        # 上面：对all_logits，所有行，每行取encode_all_label_words.reshape(-1)次
-        # label_words_logits[:, self.prompt_maskid] -= 1000 # ??? trick??? 事实上，self.prompt_maskid是空的，所以没人减了1000
         return label_words_logits
     
     def __get_encode_all_label_words_singletoken(self, encode_all_label_words):
@@ -168,42 +113,27 @@ class RankingCriterion(nn.Module): #
         logits = torch.log(logits + 1e-15)
 
         
-        # weight = nn.functional.softmax(3.0 * self.learnable_weights_for_label_wrods, dim=-1).reshape(-1)
-        # self.weights = weight
+       
         weight = [1 for i in range(len(self.learnable_weights_for_label_wrods.reshape(-1)))]
         weight = torch.tensor(weight)
         self.weights = weight
 
-        # print("---------logits.size()---------")
-        # print(logits.size())
 
-        # 细看
+       
         self.set_k_for_ranking(k_ratio)
-        # print("self.criterion.topk: ")
-        # print(self.topk)
-        # self.topk = 0.5
+       
         nottopk = torch.argsort(-logits, dim=-1)[:,self.topk:]
-        # nottopk = torch.argsort(-logits, dim=-1)[:,self.topk:] # # torch.argsort默认为升序排列，-logits又是相反结果，越靠近零的越要选
-        # print(-logits[0])
-        # print(torch.sort(-logits, dim=1)[0])
-        # print(torch.argsort(-logits, dim=1)[0])
-        # print(nottopk)
-        # print(nottopk.size(0)) # 输出为16
 
         rowid = torch.arange(nottopk.size(0)).unsqueeze(-1).expand_as(nottopk)
-        # print(torch.arange(nottopk.size(0)))
-        # print(rowid)
-        # print(rowid.size())
+       
 
         index = (rowid.reshape(-1), nottopk.reshape(-1))
-        # print(index)
 
         
         
 
         scores = torch.clone(self.weights).unsqueeze(0).repeat(logits.size(0),1)
-        # scores = torch.clone(logits)
-        # print(scores.size())
+      
 
         scores[index] = 0
         scores = scores.reshape([logits.size(0), self.class_num, self.max_len])
