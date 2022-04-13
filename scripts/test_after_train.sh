@@ -8,7 +8,7 @@
                 python -u src/test_after_train.py \
                 --task train_and_save_embedding_visualization \
                 --seed $myseed \
-                --dataset "dbpedia" \
+                --dataset "agnews" \
                 --template_id $template_id \
                 --num_train_samples_per_label -1 \
                 --num_label_types 2 \
@@ -23,8 +23,8 @@
                 --round_num 2 \
                 --file_train_dataset "-" \
                 --file_valid_dataset  "-" \
-                --file_test_dataset "test.txt" \
-                --file_test_labels_dataset "test_labels_2class_11_plant.txt" \
+                --file_test_dataset "test_2class_1_world.csv" \
+                --file_test_labels_dataset "-" \
                 --do_valid 0 \
                 --epoch 0 \
                 --best_k_ratio 0.5 \
@@ -33,4 +33,3 @@
             done
         done
     done
-# done
