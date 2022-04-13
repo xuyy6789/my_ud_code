@@ -1,5 +1,4 @@
-# for mydataset in agnews
-# do
+
     for myweight_learning_rate in 0.06
     do
         for template_id in 0
@@ -9,7 +8,7 @@
                 python -u src/run.py \
                 --task train_and_save_embedding_visualization \
                 --seed $myseed \
-                --dataset "dbpedia" \
+                --dataset "agnews" \
                 --template_id $template_id \
                 --num_train_samples_per_label 5 \
                 --num_label_types 2 \
@@ -22,9 +21,9 @@
                 --label_words_kb "label_words_common.txt" \
                 --template_file "template.txt" \
                 --round_num 0 \
-                --file_train_dataset "train.txt" \
-                --file_valid_dataset "train.txt" \
-                --file_train_labels_dataset "train_labels_2class_11_plant.txt" \
+                --file_train_dataset "train_2class_1_world.csv" \
+                --file_valid_dataset "-" \
+                --file_train_labels_dataset "-" \
                 --file_test_dataset "-" \
                 --do_valid 0 \
                 --epoch 9 \
@@ -33,4 +32,3 @@
             done
         done
     done
-# done
