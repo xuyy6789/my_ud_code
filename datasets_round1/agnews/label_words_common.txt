@@ -1,2 +1,2 @@
 not, NR, Not, NOT
-technology, engineering, science, technological
+world, politics, government, diplomatic
