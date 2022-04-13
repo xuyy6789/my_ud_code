@@ -11,7 +11,7 @@
                 --seed $myseed \
                 --dataset "dbpedia" \
                 --template_id $template_id \
-                --num_train_samples_per_label 20 \
+                --num_train_samples_per_label 5 \
                 --num_label_types 2 \
                 --num_original_label_types 4 \
                 --model_type roberta \
@@ -27,7 +27,7 @@
                 --file_train_labels_dataset "train_labels_2class_11_plant.txt" \
                 --file_test_dataset "-" \
                 --do_valid 0 \
-                --epoch 15 \
+                --epoch 9 \
                 --warmup_steps 0 \
                 --learning_rate 2e-5 
             done
