@@ -107,10 +107,10 @@ class TestAfterTrain(nn.Module):
 
 
         # 保存logits值
-        print("save results: ")
-        torch.save(all_labels, "./result/result_labels_ranking_weights_kratio0.3.pt") #将字符串写入文件中
-        torch.save(all_preds, "./result/result_preds_ranking_weights_kratio0.3.pt") #将字符串写入文件中
-        print("write finished!")
+#         print("save results: ")
+#         torch.save(all_labels, "./result/result_labels_ranking_weights_kratio0.3.pt") #将字符串写入文件中
+#         torch.save(all_preds, "./result/result_preds_ranking_weights_kratio0.3.pt") #将字符串写入文件中
+#         print("write finished!")
         
 
         acc = accuracy_score(all_labels, all_preds)
